@@ -14,7 +14,7 @@ private:
 
 public:
     Graph_Matrix(unsigned int & vertices, unsigned int & edges, unsigned int & start);
-    Graph_Matrix(string file_name);  //From file
+    Graph_Matrix(fstream& input);  //From file
     ~Graph_Matrix();
     unsigned int & set_Vertices_Number();
     const unsigned int & get_Vertices_Number();
@@ -43,10 +43,16 @@ Graph_Matrix::Graph_Matrix(unsigned int & vertices, unsigned int & edges, unsign
     }
 }
 
-Graph_Matrix::Graph_Matrix(string file_name)
+Graph_Matrix::Graph_Matrix(fstream& input)
 {
-    ifstream input;
-    input.open(file_name);
+    // ifstream input;
+    // input.open(file_name);
+    if (!input.is_open())
+    {
+        cout<<"File not opened"<<endl;
+        exit(-1);
+    }
+    
 
     input>>set_Edge_Number()>>set_Vertices_Number()>>Starting_Point;
 
@@ -57,7 +63,7 @@ Graph_Matrix::Graph_Matrix(string file_name)
     unsigned int tmp=0;
     for(int i=0; i<Vertices_Number; i++)
     {
-        for(int j=tmp; j<Vertices_Number; j++)
+        for(int j=tmp; j<Vertices_Number; ++j)
         {
             Matrix[i][j]=0;
             Matrix[j][i]=0;
