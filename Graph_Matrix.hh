@@ -14,14 +14,15 @@ private:
 
 public:
     Graph_Matrix(unsigned int & vertices, unsigned int & edges, unsigned int & start);
-    Graph_Matrix(fstream& input);  //From file
+    Graph_Matrix(ifstream& input);  //From file
     ~Graph_Matrix();
     unsigned int & set_Vertices_Number();
     const unsigned int & get_Vertices_Number();
     unsigned int & set_Edge_Number();
     const unsigned int & get_Edge_Number();
+    void show_matrix();
 
-    unsigned int & get_random_value(unsigned int & const vertices);
+    // unsigned int & get_random_value(unsigned int & const vertices);
 };
 
 Graph_Matrix::Graph_Matrix(unsigned int & vertices, unsigned int & edges, unsigned int & start)
@@ -43,26 +44,24 @@ Graph_Matrix::Graph_Matrix(unsigned int & vertices, unsigned int & edges, unsign
     }
 }
 
-Graph_Matrix::Graph_Matrix(fstream& input)
+Graph_Matrix::Graph_Matrix(ifstream& input)
 {
-    // ifstream input;
-    // input.open(file_name);
     if (!input.is_open())
     {
         cout<<"File not opened"<<endl;
         exit(-1);
     }
     
-
     input>>set_Edge_Number()>>set_Vertices_Number()>>Starting_Point;
-
+    // cout<<"Edge: "<<get_Edge_Number()<<"Vertices: "<<get_Vertices_Number()<<endl;
     Matrix=new unsigned int*[Vertices_Number];
     for(int i=0; i<Vertices_Number; i++)
         Matrix[i]=new unsigned int[Vertices_Number];
-
+    
     unsigned int tmp=0;
     for(int i=0; i<Vertices_Number; i++)
     {
+        
         for(int j=tmp; j<Vertices_Number; ++j)
         {
             Matrix[i][j]=0;
@@ -75,10 +74,12 @@ Graph_Matrix::Graph_Matrix(fstream& input)
     for(int i=0; i<Edge_Number; i++)
         {
             input>>v1>>v2>>weight;
+            // cout<<"v1: "<<v1<<endl;
+            // cout<<"v2: "<<v2<<endl;
+            // cout<<"weight: "<<weight<<endl;
             Matrix[v1][v2]=weight;
             Matrix[v2][v1]=weight;
         }
-    input.close();
 }
 
 Graph_Matrix::~Graph_Matrix()
@@ -104,7 +105,15 @@ const unsigned int & Graph_Matrix::get_Edge_Number()
     return Edge_Number;
 }
 
-unsigned int get_random_value(unsigned int & const vertices)
+void Graph_Matrix::show_matrix()
 {
-    return rand()%vertices;
+    for (int i=0; i<Vertices_Number; i++)
+    {
+        for (int j=0; j<Vertices_Number; j++)
+        {
+            cout<<Matrix[i][j]<<"  ";
+        }
+        cout<<endl;
+    }
+    
 }
