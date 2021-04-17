@@ -2,8 +2,10 @@
 #include<fstream>
 #include<cstdlib>
 #include<ctime>
+#include<string>
 // #include"Vertex.hh"
 
+#define MAX 4294967295 
 using namespace std;
 
 class Graph_Matrix
@@ -12,6 +14,8 @@ private:
     unsigned int Vertices_Number, Edge_Number, Starting_Point;
     unsigned int **Matrix;
 
+    unsigned int *Cost=nullptr;
+    unsigned int **Path=nullptr;
 public:
     Graph_Matrix(unsigned int & vertices, unsigned int & edges, unsigned int & start);
     Graph_Matrix(ifstream& input);  //From file
@@ -21,7 +25,9 @@ public:
     unsigned int & set_Edge_Number();
     const unsigned int & get_Edge_Number();
     void show_matrix();
-
+    void show_path(unsigned int vertix_number);
+    void show_path();
+    void solve_BF();
     // unsigned int & get_random_value(unsigned int & const vertices);
 };
 
@@ -74,9 +80,6 @@ Graph_Matrix::Graph_Matrix(ifstream& input)
     for(int i=0; i<Edge_Number; i++)
         {
             input>>v1>>v2>>weight;
-            // cout<<"v1: "<<v1<<endl;
-            // cout<<"v2: "<<v2<<endl;
-            // cout<<"weight: "<<weight<<endl;
             Matrix[v1][v2]=weight;
             Matrix[v2][v1]=weight;
         }
@@ -116,4 +119,77 @@ void Graph_Matrix::show_matrix()
         cout<<endl;
     }
     
+}
+
+void Graph_Matrix::solve_BF()
+{
+    unsigned int max=4294967295;
+    Cost=new unsigned int[Vertices_Number];
+    Path=new unsigned int*[Vertices_Number];
+
+    for (int i=0; i<Vertices_Number; i++)
+    {
+        Cost[i]=MAX;
+        Path[i]=new unsigned int[Vertices_Number];
+        for (int j=0; j<Vertices_Number; j++)
+        {
+            Path[i][j]=-1;
+        }
+    }
+
+    Cost[Starting_Point]=0;
+
+    for(int c = 1; c < Vertices_Number; c++)
+    {
+        for (int i=0; i<Vertices_Number; i++)
+        {
+            for (int j=0; j<Vertices_Number; j++)
+            {
+                if(Cost[i] != MAX && Matrix[j][i] != 0 && Cost[j] > Cost[i]+Matrix[j][i])
+                {
+                    Cost[j]=Cost[i]+Matrix[j][i];
+                    Path[j][i]=i;
+                }
+            }
+        }
+    }
+}
+
+void Graph_Matrix::show_path(unsigned int vertix_number)
+{
+    cout<<"Starting_Point: "<<Starting_Point+1<<endl;
+    cout<<"Path to "<<vertix_number+1<<" vertix: ";
+
+    // unsigned int final_cost=0;
+
+    for(int i=0; i<Vertices_Number; i++)
+    {
+        if(Path[vertix_number][i]!=MAX)
+        {
+            cout<<Path[vertix_number][i]+1<<"  ";
+        }
+    }
+    cout<<endl;
+
+    cout<<"Final cost: "<<Cost[vertix_number]<<endl;
+}
+
+void Graph_Matrix::show_path()
+{
+    cout<<"Starting_Point: "<<Starting_Point+1<<endl;
+    for (int vertix_number=0; vertix_number<Vertices_Number; vertix_number++)
+    {
+        cout<<"Path to "<<vertix_number+1<<" vertix: ";
+
+        for(int i=0; i<Vertices_Number; i++)
+        {
+            if(Path[vertix_number][i]!=MAX)
+            {
+                cout<<Path[vertix_number][i]+1<<"  ";
+            }
+        }
+        cout<<endl;
+
+        cout<<"Final cost: "<<Cost[vertix_number]<<endl;
+    }
 }
