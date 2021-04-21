@@ -11,7 +11,10 @@ protected:
     unsigned int Starting_Number;
 
     Vertex **Tab_List;
+
+    //After solution
     unsigned int *Cost;
+    Vertex **Path;
 
 public:
     Graph_List(unsigned int & vertices, unsigned int & edges, unsigned int & start);
@@ -21,6 +24,8 @@ public:
     void show_list();
     void show_list(unsigned int number);
     void show_list(fstream output);
+
+    void solve_BF();
 };
 
 Graph_List::Graph_List(unsigned int & vertices, unsigned int & edges, unsigned int & start):
@@ -31,21 +36,38 @@ Graph_List::Graph_List(ifstream & input)
 {
     input>>Edge_Number>>Vertices_Number>>Starting_Number;
 
-    unsigned int tmp[Vertices_Number][3];
-    Tab_List = new Vertex*[Vertices_Number];
+    // unsigned int tmp[Vertices_Number][3];
+    unsigned int v1, v2, w;
 
+    Tab_List = new Vertex*[Vertices_Number];
     for (int vert=0;vert<Vertices_Number;vert++)
     {
         Tab_List[vert] = nullptr;
-        input>>tmp[vert][0]>>tmp[vert][1]>>tmp[vert][2];
-
-        Vertex *list = new Vertex();
-        list->set_value()=tmp[vert][1];
-        list->set_weight()=tmp[vert][2];
-        list->set_Next(Tab_List[vert]);
-        Tab_List[vert]=list;
-        // Tab_List[tmp[vert][0]] = new Vertex(tmp[vert][1],tmp[vert][2],Tab_List[tmp[vert][0]]);
     }
+
+    for (int edge=0;edge<Edge_Number;edge++)
+    {
+        input>>v1>>v2>>w;
+        Vertex *list = new Vertex();
+
+        cout<<"edge: "<<edge<<endl;
+        list->set_value()=v2;
+        list->set_weight()=w;
+        list->set_Next(Tab_List[v1]);
+        Tab_List[v1]=list;
+    }
+
+    // for (int edge=0;edge<Edge_Number;edge++) //Loop for undirected graph 
+    // {
+    //     input>>v1>>v2>>w;
+    //     Vertex *list = new Vertex();
+        
+    //     cout<<"edge: "<<edge<<endl;
+    //     list->set_value()=v1;
+    //     list->set_weight()=w;
+    //     list->set_Next(Tab_List[v2]);
+    //     Tab_List[v2]=list;
+    // }
     
 }
 
@@ -59,10 +81,14 @@ void Graph_List::show_list()
       {
         cout << "tab[" << i << "] =";
         list_tmp = Tab_List[i];
+        // int k=0;
         while(list_tmp)
         {
+            // k++;
             cout << list_tmp->get_value() <<" ";
+            // cout<<"new value ";
             list_tmp = list_tmp->get_Next();
+            // cout<<"in new value ";
         }
         cout << endl;
     }
@@ -99,3 +125,36 @@ void Graph_List::show_list(fstream output)
         output << endl;
     }   
 }
+
+void Graph_List::solve_BF()
+{
+    unsigned int max=4294967295;
+    // Vertex *list;
+
+    // Path = new Vertex*[Vertices_Number];
+    Cost = new unsigned int[Vertices_Number];
+    for (int i=0; i<Vertices_Number; i++)
+    {
+        Path[i]=nullptr;
+        Cost[i]=max;
+    }
+    
+    Cost[Starting_Number]=0;
+
+    for(int first=1; first< Vertices_Number; first++)
+    {
+        for (int i=0; i<Vertices_Number; i++)
+        {
+            for (list=Tab_List[i]; list; list=list->get_Next())
+            {
+                if(Cost[i] != max && Cost[list->get_Next()->get_value()] > Cost[i]+list->get_weight())
+                {
+                    Cost[list->get_Next()->get_value()] = Cost[i] + list->get_weight();
+                    // list->set_Next(Path[i]);
+                    // Path[i]=list;
+                }
+            }
+        }
+    }
+}
+

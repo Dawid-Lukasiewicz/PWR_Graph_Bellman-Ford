@@ -99,7 +99,8 @@ void measure_BF(Graph_Matrix & graph_matrix, fstream& output)
 void measure_all()
 {
     srand(time(NULL));
-
+    // unsigned int vertices[V_NUMBER]={10};
+    // unsigned int filling[F_NUMBER]={100};
     unsigned int vertices[V_NUMBER]={10,50,100,500,1000};
     unsigned int filling[4]={25,50,75,100};
 
@@ -139,41 +140,18 @@ int main()
 {
     // measure_all();
     srand(time(NULL));
-    // unsigned int vertices[V_NUMBER]={10};
-    // unsigned int filling[F_NUMBER]={100};
+    
     unsigned int vertices[V_NUMBER]={10,50,100,500,1000};
     unsigned int filling[F_NUMBER]={25,50,75,100};
 
 
-    string Data_Name="data.txt", Measure_Name="measure.txt";
-    fstream Data_File, Measure_File;
-    ifstream Input;
+    string Data_Name="test_data.txt", Measure_Name="test_measure.txt";
+    ifstream Data_File, Measure_File;
 
-    generate_parameters(vertices, filling, Data_File, Data_Name);
-    Input.open(Data_Name, ifstream::in);
-
-    Measure_File.open(Measure_Name, fstream::out);
-    Measure_File.close();   //To clean file before opening it with append mode
-    Measure_File.open(Measure_Name, fstream::app);
-    
-    for (int i=0; i<V_NUMBER; i++)
-    {
-        for (int j=0; j<4; j++)
-        {
-            insert_parameters(vertices[i], filling[j],Measure_File);
-            for(int k=0; k<INSTANCES; k++)
-            {
-                Graph_List T(Input);
-                // cout<<"Here 1"<<endl;   
-                T.show_list(0);   
-                // cout<<"Here 2"<<endl;   
-            }
-            Measure_File<<endl;
-        }
-    }
-    
-    Measure_File.close();
-    Input.close();
+    Data_File.open(Data_Name, ios::in);
+    Graph_List T(Data_File);
+    T.show_list();
+    T.solve_BF();
 
     return 0;
 }

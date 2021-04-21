@@ -9,7 +9,7 @@ using namespace std;
 
 class Vertex
 {
-    Vertex *Next;
+    Vertex *Next=nullptr;
     unsigned int Value, Weight;
 
 public:
@@ -20,15 +20,11 @@ public:
     const unsigned int & get_value();
     unsigned int & set_weight();
     const unsigned int & get_weight();
-    // Vertex * set_Next();
-    void set_Next(Vertex *list);
+    
+    void set_Next(Vertex * list);
+    // void get_Next(Vertex * list) const;
     Vertex * get_Next() const;
 };
-
-// Vertex::Vertex(ifstream& input)
-// {
-//     input>>Value;
-// }
 
  Vertex::Vertex()
  {}
@@ -57,7 +53,7 @@ const unsigned int & Vertex::get_weight()
     return Weight;
 }
 
-void Vertex::set_Next(Vertex *list)
+void Vertex::set_Next(Vertex * list)
 {
     Next=list;
 }
