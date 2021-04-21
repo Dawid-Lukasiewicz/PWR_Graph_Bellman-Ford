@@ -1,18 +1,11 @@
 #include<cstdlib>
 #include<iostream>
 #include"Graph_Matrix.hh"
+#include"Graph_List.hh"
 
 #define V_NUMBER 5
 #define INSTANCES 2
-// int ** generate_g_matrix(unsigned int & vertices)
-// {
-//     int **matrix=new int*[vertices];
-//     for (int i=0; i<vertices; i++)
-//     {
-//         matrix[i]=new int[vertices];
-//     }
-//     return matrix;
-// }
+#define F_NUMBER 4
 
 void generate_to_file(unsigned int vertices, unsigned int edges, fstream & to_file, string & file_name)
 {
@@ -49,7 +42,7 @@ void generate_parameters(unsigned int *vertices, unsigned int *filling, fstream 
 {
     // unsigned int vertices[V_NUMBER]={10,50,100,500,1000};   //Sizes of graph given in project
     unsigned int max_number_edge[V_NUMBER];     //Max limit of edges possible in given graph
-    unsigned int edges[V_NUMBER][4];            //Amount of edges depending od filling od graph
+    unsigned int edges[V_NUMBER][F_NUMBER];            //Amount of edges depending od filling od graph
     // unsigned int filling[4]={25,50,75,100};     //Percent of filling given in project
 
     to_file.open(file_name, std::fstream::out);    //To clear data
@@ -59,7 +52,7 @@ void generate_parameters(unsigned int *vertices, unsigned int *filling, fstream 
     for (int v=0; v<V_NUMBER; v++)      //V_NUMBER of sizes of graph
     {
         max_number_edge[v]=vertices[v]*(vertices[v]-1)/2;   //Find the max amount of possible edges
-        for (int f=0; f<4; f++)     //4 different number of fillings of graph
+        for (int f=0; f<F_NUMBER; f++)     //4 different number of fillings of graph
         {
             edges[v][f]=filling[f]*max_number_edge[v]/100;      //Number of edges given by filling percentage
             for (int i=0; i<INSTANCES; i++)       //100 different instances of the same type of graph
@@ -91,13 +84,6 @@ Graph_Matrix **** load_all_graphs(unsigned int const& vertices, unsigned int con
     return Klasa;
 }
 
-Graph_Matrix * create_graph(ifstream& input)
-{
-
-    Graph_Matrix *T = new Graph_Matrix(input);
-
-}
-
 void measure_BF(Graph_Matrix & graph_matrix, fstream& output)
 {
     clock_t time_start, time_stop;
@@ -110,8 +96,7 @@ void measure_BF(Graph_Matrix & graph_matrix, fstream& output)
 }
 
 
-
-int main()
+void measure_all()
 {
     srand(time(NULL));
 
@@ -127,7 +112,7 @@ int main()
     Input.open(Data_Name, ifstream::in);
 
     Measure_File.open(Measure_Name, fstream::out);
-    Measure_File.close();
+    Measure_File.close();   //To clean file before opening it with append mode
     Measure_File.open(Measure_Name, fstream::app);
     
     for (int i=0; i<V_NUMBER; i++)
@@ -147,10 +132,48 @@ int main()
     Measure_File.close();
     Input.close();
     
-    // Graph_Matrix **** Klasa=load_all_graphs(V_NUMBER,4,INSTANCES,Input);
+}
 
-    // T[0][3][0]->show_matrix();
-    // T[0][3][0]->solve_BF();
-    // T[0][3][0]->show_path();
+
+int main()
+{
+    // measure_all();
+    srand(time(NULL));
+    // unsigned int vertices[V_NUMBER]={10};
+    // unsigned int filling[F_NUMBER]={100};
+    unsigned int vertices[V_NUMBER]={10,50,100,500,1000};
+    unsigned int filling[F_NUMBER]={25,50,75,100};
+
+
+    string Data_Name="data.txt", Measure_Name="measure.txt";
+    fstream Data_File, Measure_File;
+    ifstream Input;
+
+    generate_parameters(vertices, filling, Data_File, Data_Name);
+    Input.open(Data_Name, ifstream::in);
+
+    Measure_File.open(Measure_Name, fstream::out);
+    Measure_File.close();   //To clean file before opening it with append mode
+    Measure_File.open(Measure_Name, fstream::app);
+    
+    for (int i=0; i<V_NUMBER; i++)
+    {
+        for (int j=0; j<4; j++)
+        {
+            insert_parameters(vertices[i], filling[j],Measure_File);
+            for(int k=0; k<INSTANCES; k++)
+            {
+                Graph_List T(Input);
+                // cout<<"Here 1"<<endl;   
+                T.show_list(0);   
+                // cout<<"Here 2"<<endl;   
+            }
+            Measure_File<<endl;
+        }
+    }
+    
+    Measure_File.close();
+    Input.close();
+
     return 0;
 }

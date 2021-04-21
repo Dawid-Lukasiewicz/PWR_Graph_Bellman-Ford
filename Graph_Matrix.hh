@@ -28,7 +28,6 @@ public:
     void show_path(unsigned int vertix_number);
     void show_path();
     void solve_BF();
-    // unsigned int & get_random_value(unsigned int & const vertices);
 };
 
 Graph_Matrix::Graph_Matrix(unsigned int & vertices, unsigned int & edges, unsigned int & start)
@@ -81,12 +80,21 @@ Graph_Matrix::Graph_Matrix(ifstream& input)
         {
             input>>v1>>v2>>weight;
             Matrix[v1][v2]=weight;
-            Matrix[v2][v1]=weight;
+            // Matrix[v2][v1]=weight; //
         }
 }
 
 Graph_Matrix::~Graph_Matrix()
-{}
+{
+    for (int i=0;i<Vertices_Number; i++)
+    {
+        delete[] Matrix[i];
+        delete[] Path[i];
+    }
+    delete Matrix;
+    delete Path;
+    delete Cost;
+}
 
 unsigned int & Graph_Matrix::set_Vertices_Number()
 {
@@ -145,10 +153,10 @@ void Graph_Matrix::solve_BF()
         {
             for (int j=0; j<Vertices_Number; j++)
             {
-                if(Cost[i] != MAX && Matrix[j][i] != 0 && Cost[j] > Cost[i]+Matrix[j][i])
+                if(Cost[j] != MAX && Matrix[i][j] != 0 && Cost[i] > Cost[j]+Matrix[i][j])
                 {
-                    Cost[j]=Cost[i]+Matrix[j][i];
-                    Path[j][i]=i;
+                    Cost[i]=Cost[j]+Matrix[i][j];
+                    Path[i][j]=j;
                 }
             }
         }
