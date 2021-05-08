@@ -26,11 +26,14 @@ public:
     Vertex * get_Next() const;
 };
 
- Vertex::Vertex()
- {}
+Vertex::Vertex()
+{}
 
 Vertex::Vertex(unsigned int & v2, unsigned int & weight, Vertex *list):
     Value(v2), Weight(weight), Next(list)
+{}
+
+Vertex::~Vertex()
 {}
 
 unsigned int & Vertex::set_value()
