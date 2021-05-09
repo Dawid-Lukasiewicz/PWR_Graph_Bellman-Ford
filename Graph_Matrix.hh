@@ -64,7 +64,6 @@ Graph_Matrix::Graph_Matrix(ifstream& input)
     }
     
     input>>set_Edge_Number()>>set_Vertices_Number()>>Starting_Point;
-    // cout<<"Edge: "<<get_Edge_Number()<<"Vertices: "<<get_Vertices_Number()<<endl;
     Matrix=new unsigned int*[Vertices_Number];
     for(int i=0; i<Vertices_Number; i++)
         Matrix[i]=new unsigned int[Vertices_Number];
@@ -86,7 +85,7 @@ Graph_Matrix::Graph_Matrix(ifstream& input)
         {
             input>>v1>>v2>>weight;
             Matrix[v2][v1]=weight;
-            // Matrix[v2][v1]=weight; //
+            // Matrix[v2][v1]=weight; // Dla skierowanego grafu
         }
 }
 
@@ -95,7 +94,6 @@ Graph_Matrix::~Graph_Matrix()
     for (int i=0;i<Vertices_Number; i++)
     {
         delete[] Matrix[i];
-        // delete[] Path[i];
     }
     delete Matrix;
     delete Path;
@@ -146,43 +144,6 @@ void Graph_Matrix::show_matrix(fstream& output)
     }
 }
 
-// void Graph_Matrix::show_path(unsigned int vertix_number)
-// {
-//     cout<<"Starting_Point: "<<Starting_Point<<endl;
-//     cout<<"Path to "<<vertix_number<<" vertix: ";
-
-//     for(int i=0; i<Vertices_Number; i++)
-//     {
-//         if(Path[vertix_number][i]!=MAX && Path[vertix_number][i]!=-1)
-//         {
-//             cout<<Path[vertix_number][i]<<"  ";
-//         }
-//     }
-//     cout<<endl;
-
-//     cout<<"Final cost: "<<Cost[vertix_number]<<endl;
-// }
-
-// void Graph_Matrix::show_path()
-// {
-//     cout<<"Starting_Point: "<<Starting_Point<<endl;
-//     for (int vertix_number=0; vertix_number<Vertices_Number; vertix_number++)
-//     {
-//         cout<<"Path to "<<vertix_number<<" vertix: ";
-
-//         for(int i=0; i<Vertices_Number; i++)
-//         {
-//             if(Path[vertix_number][i]!=-1)
-//             {
-//                 cout<<Path[vertix_number][i]<<"  ";
-//             }
-//         }
-//         cout<<endl;
-//         cout<<"Final cost: "<<Cost[vertix_number]<<endl;
-//     }
-    
-// }
-
 void Graph_Matrix::show_path()
 {
     cout<<"Starting_Point: "<<Starting_Point<<endl;
@@ -231,36 +192,15 @@ void Graph_Matrix::solve_BF()
 {
     unsigned int max=4294967295;
     Cost=new unsigned int[Vertices_Number];
-    // Path=new int*[Vertices_Number];
     Path=new int[Vertices_Number];
 
     for (int i=0; i<Vertices_Number; i++)
     {
         Cost[i]=MAX;
         Path[i]=-1;
-        // Path[i]=new int[Vertices_Number];
-        // for (int j=0; j<Vertices_Number; j++)
-        // {
-        //     Path[i][j]=-1;
-        // }
     }
 
     Cost[Starting_Point]=0;
-
-    // for(int c = 1; c < Vertices_Number; c++)
-    // {
-    //     for (int i=0; i<Vertices_Number; i++)
-    //     {
-    //         for (int j=0; j<Vertices_Number; j++)
-    //         {
-    //             if(Cost[i] != MAX && Matrix[j][i] != 0 && Cost[j] > Cost[i]+Matrix[j][i])
-    //             {
-    //                 Cost[j]=Cost[i]+Matrix[j][i];
-    //                 Path[j]=i;
-    //             }
-    //         }
-    //     }
-    // }
 
     for(int c = 1; c < Vertices_Number; c++)
     {

@@ -3,7 +3,6 @@
 #include<cstdlib>
 #include<ctime>
 #include<string>
-// #include<memory>
 
 using namespace std;
 
@@ -22,7 +21,6 @@ public:
     const unsigned int & get_weight();
     
     void set_Next(Vertex * list);
-    // void get_Next(Vertex * list) const;
     Vertex * get_Next() const;
 };
 

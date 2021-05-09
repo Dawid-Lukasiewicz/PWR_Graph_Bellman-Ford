@@ -203,8 +203,6 @@ void Graph_List::solve_BF()
             {//Cost[list->get_value()] != MAX && Cost[i] > Cost[list->get_value()]+list->get_weight()
                 if(Cost[list->get_value()] > Cost[i]+list->get_weight())
                 {
-                    // Cost[i] = Cost[list->get_value()] + list->get_weight();
-                    // Path[i]=list->get_value();
                     Cost[list->get_value()] = Cost[i] + list->get_weight();
                     Path[list->get_value()]=i;
                 }
