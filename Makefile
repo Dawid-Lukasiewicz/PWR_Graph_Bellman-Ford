@@ -6,4 +6,4 @@ compile: main.cpp Graph_Matrix.hh Graph_List.hh Vertex.hh
 	g++ ${FLAGS} -o bf_graf main.cpp Graph_Matrix.hh Graph_List.hh Vertex.hh
 
 clean:
-	em -f *.o *.ghc bf_graf
+	rm -f *.o *.gch *.out
